@@ -84,20 +84,20 @@ jobs:
 
   # Job 4 : Deploy on Azure VM (SSH)
  
-  # deploy:
-#   runs-on: ubuntu-latest
-#   needs: docker
-#   steps:
-#     - name: Deploy on Azure VM via SSH
-#       uses: appleboy/ssh-action@v1.0.3
-#       with:
-#         host: ${{ secrets.AZURE_HOST }}
-#         username: ${{ secrets.AZURE_USER }}
-#         key: ${{ secrets.AZURE_SSH_KEY }}
-#         script: |
-#           docker pull johary94/tp-cicd-azure:latest
-#           docker stop myapp || true
-#           docker rm myapp || true
-#           docker run -d -p 3000:3000 --name myapp johary94/tp-cicd-azure:latest
-#           curl -f http://localhost:3000/health
+  deploy:
+    runs-on: ubuntu-latest
+    needs: docker
 
+    steps:
+      - name: Deploy on Azure VM via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.AZURE_HOST }}
+          username: ${{ secrets.AZURE_USER }}
+          key: ${{ secrets.AZURE_SSH_KEY }}
+          script: |
+            docker pull johary94/tp-cicd-azure:latest
+            docker stop myapp || true
+            docker rm myapp || true
+            docker run -d -p 3000:3000 --name myapp johary94/tp-cicd-azure:latest
+            curl -f http://localhost:3000/health
